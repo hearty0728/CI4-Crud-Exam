@@ -17,8 +17,10 @@ The [User Guide](https://codeigniter.com/user_guide/) is the primary documentati
 - Run `php spark db:create` to create a new database schema.
 - Copy `env` to `.env` and tailor for your app, specifically the baseURL and any database settings.
 - Run `php spark migrate` to running database migration
+- Run the profile migration: `mysql -u root -p your_database_name < profile_migration.sql` (or execute via phpMyAdmin)
 - Run `php spark db:seed Users` to seeding default database user
 - Run `php spark key:generate` to create encrypter key
+- Ensure `public/uploads/profiles/` directory exists and is writable
 - Run `php spark serve` to launching the CodeIgniter PHP-Development Server
 
 ## Server Requirements
@@ -44,4 +46,10 @@ Features on this project:
 - Authorization
 - User Registration
 - Menu Management with auto create controller and view file
+- Student Profile Management
+  - View personal profile information
+  - Edit profile details (student ID, course, year level, section, phone, address)
+  - Upload and manage profile photos
+  - Live image preview before upload
+  - Session-aware profile updates
 

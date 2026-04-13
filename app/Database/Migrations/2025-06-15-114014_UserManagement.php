@@ -128,6 +128,31 @@ class UserManagement extends Migration
                 'constraint'     => 5,
                 'unsigned'       => true,
             ],
+            'student_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '50',
+                'null'       => true,
+            ],
+            'course' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '100',
+                'null'       => true,
+            ],
+            'year_level' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '20',
+                'null'       => true,
+            ],
+            'section' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '50',
+                'null'       => true,
+            ],
+            'profile_image' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => true,
+            ],
             'created_at' => [
                 'type'           => 'datetime'
             ],

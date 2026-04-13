@@ -1,82 +1,72 @@
-<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-    <div class="sidebar-brand">
-        <a href="<?= base_url() ?>" class="brand-link">
-            <img src="<?= base_url('assets/img/AdminLTELogo.png') ?>" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
-            <span class="brand-text fw-light">CodeIgniter4</span>
-        </a>
+<?php
+$role   = session('user')['role'] ?? 'guest';
+$seg    = service('uri')->getSegment(1);
+$subseg = service('uri')->getSegment(2);
+$name   = session('user')['fullname'] ?? 'User';
+$initial = strtoupper(substr($name, 0, 1));
+
+function sideLink($href, $icon, $label, $active, $badge = null) {
+    $cls = 'nav-link' . ($active ? ' active' : '');
+    $b   = $badge ? "<span class=\"nav-badge\">{$badge}</span>" : '';
+    return "<a href=\"{$href}\" class=\"{$cls}\"><i class=\"bi bi-{$icon}\"></i> {$label}{$b}</a>";
+}
+?>
+<aside class="app-sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-mark">HSE</div>
+        <span class="logo-name">HSE Portal</span>
+        <span class="logo-badge">v4</span>
     </div>
-    <div class="sidebar-wrapper">
-        <nav class="mt-2">
-            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" aria-label="Main navigation" data-accordion="false" id="navigation">
-                <li class="nav-header">COMMON PAGES</li>
-                <li class="nav-item <?= ($segment == 'dashboard' || $segment == 'dashboard-v2' || $segment == 'dashboard-v3') ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= ($segment == 'dashboard' || $segment == 'dashboard-v2' || $segment == 'dashboard-v3') ? 'active' : '' ?>">
-                        <i class="nav-icon bi bi-speedometer"></i>
-                        <p>Dashboard<i class="nav-arrow bi bi-chevron-right"></i></p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?= base_url('dashboard') ?>" class="nav-link <?= ($segment == 'dashboard' && !str_contains(current_url(), 'v2') && !str_contains(current_url(), 'v3')) ? 'active' : '' ?>">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Dashboard v1</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('dashboard-v2') ?>" class="nav-link <?= ($segment == 'dashboard-v2') ? 'active' : '' ?>">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Dashboard v2</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('dashboard-v3') ?>" class="nav-link <?= ($segment == 'dashboard-v3') ? 'active' : '' ?>">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Dashboard v3</p>
-                            </a>
-                        </li>
-                    </ul>
+
+    <?php if ($role === 'admin'): ?>
+    <div class="sidebar-section">
+        <div class="sidebar-section-label">Main</div>
+        <?= sideLink(base_url('dashboard'), 'grid-1x2-fill', 'Dashboard', $seg === 'dashboard') ?>
+        <?= sideLink(base_url('students'),  'people-fill',   'Students',  $seg === 'students', '1,248') ?>
+    </div>
+    <div class="sidebar-section">
+        <div class="sidebar-section-label">Administration</div>
+        <?= sideLink(base_url('admin/users'), 'person-badge-fill', 'Users',  $seg === 'admin' && $subseg === 'users') ?>
+        <?= sideLink(base_url('admin/roles'), 'shield-fill',       'Roles',  $seg === 'admin' && $subseg === 'roles') ?>
+    </div>
+
+    <?php elseif ($role === 'teacher' || $role === 'coordinator'): ?>
+    <div class="sidebar-section">
+        <div class="sidebar-section-label">Main</div>
+        <?= sideLink(base_url('dashboard'), 'grid-1x2-fill', 'Dashboard',   $seg === 'dashboard') ?>
+        <?= sideLink(base_url('students'),  'people-fill',   'My Students', $seg === 'students') ?>
+    </div>
+
+    <?php else: ?>
+    <div class="sidebar-section">
+        <div class="sidebar-section-label">My Space</div>
+        <?= sideLink(base_url('student/dashboard'), 'house-fill',  'Home',     $seg === 'student') ?>
+        <?= sideLink(base_url('profile'),            'person-fill', 'Profile',  $seg === 'profile' && !$subseg) ?>
+        <?= sideLink(base_url('profile/edit'),       'gear-fill',   'Settings', $seg === 'profile' && $subseg === 'edit') ?>
+    </div>
+    <?php endif; ?>
+
+    <div class="sidebar-footer">
+        <div class="dropdown">
+            <div class="sidebar-user" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="sidebar-avatar"><?= $initial ?></div>
+                <div>
+                    <div class="sidebar-user-name"><?= esc($name) ?></div>
+                    <div class="sidebar-user-role"><?= esc($role) ?></div>
+                </div>
+                <i class="bi bi-chevron-up" style="margin-left:auto;font-size:11px;color:rgba(255,255,255,.3);"></i>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end" style="margin-bottom:8px;">
+                <li>
+                    <div style="padding:8px 10px 10px;border-bottom:1px solid var(--border);margin-bottom:4px;">
+                        <div style="font-size:13px;font-weight:600;color:var(--text-1);"><?= esc($name) ?></div>
+                        <div style="font-size:11px;color:var(--text-3);text-transform:capitalize;"><?= esc($role) ?></div>
+                    </div>
                 </li>
-                <?php foreach ($MenuCategory as $mCategory) : ?>
-                    <?php if ($mCategory['menu_category'] != 'Common Page') : ?>
-                        <li class="nav-header"><?= $mCategory['menu_category'] ?></li>
-                    <?php endif; ?>
-                    <?php
-                    $Menu = getMenu($mCategory['menuCategoryID'], $user['role']);
-                    foreach ($Menu as $menu) :
-                        if ($menu['title'] == 'Dashboard') continue;
-                        if ($menu['parent'] == 0) :
-                    ?>
-                            <li class="nav-item">
-                                <a href="<?= base_url($menu['url']) ?>" class="nav-link <?= ($segment == $menu['url']) ? 'active' : '' ?>">
-                                    <i class="nav-icon bi bi-<?= $menu['icon'] ?>"></i>
-                                    <p><?= $menu['title'] ?></p>
-                                </a>
-                            </li>
-                        <?php
-                        else :
-                            $SubMenu = getSubMenu($menu['menu_id'], $user['role']);
-                        ?>
-                            <li class="nav-item <?= ($segment == $menu['url']) ? 'menu-open' : '' ?>">
-                                <a href="#" class="nav-link <?= ($segment == $menu['url']) ? 'active' : '' ?>">
-                                    <i class="nav-icon bi bi-<?= $menu['icon'] ?>"></i>
-                                    <p><?= $menu['title'] ?><i class="nav-arrow bi bi-chevron-right"></i></p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <?php foreach ($SubMenu as $subMenu) : ?>
-                                        <li class="nav-item">
-                                            <a href="<?= base_url($menu['url'] . '/' . $subMenu['url']) ?>" class="nav-link <?= ($subsegment == $subMenu['url']) ? 'active' : '' ?>">
-                                                <i class="nav-icon bi bi-circle"></i>
-                                                <p><?= $subMenu['title'] ?></p>
-                                            </a>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </li>
-                        <?php
-                        endif;
-                    endforeach;
-                    ?>
-                <?php endforeach; ?>
+                <li><a class="dropdown-item" href="<?= base_url('profile') ?>"><i class="bi bi-person"></i> Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="<?= base_url('logout') ?>"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
             </ul>
-        </nav>
+        </div>
     </div>
 </aside>

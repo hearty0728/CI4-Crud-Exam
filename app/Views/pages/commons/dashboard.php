@@ -1,210 +1,213 @@
 <?= $this->extend('layouts/main') ?>
-
-<?= $this->section('breadcrumb') ?>
-<div class="row">
-    <div class="col-sm-6"><h3 class="mb-0">Dashboard</h3></div>
-    <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-end">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-        </ol>
-    </div>
-</div>
-<?= $this->endSection() ?>
-
 <?= $this->section('content') ?>
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <div class="small-box text-bg-primary">
-            <div class="inner">
-                <h3>150</h3>
-                <p>New Orders</p>
-            </div>
-            <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
-            </svg>
-            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">More info <i class="bi bi-link-45deg"></i></a>
-        </div>
+
+<?php $user = session('user'); ?>
+
+<!-- Page Head -->
+<div class="page-head">
+    <div>
+        <h1>Dashboard</h1>
+        <p>Good <?= (date('H') < 12 ? 'morning' : (date('H') < 17 ? 'afternoon' : 'evening')) ?>, <?= esc(explode(' ', $user['fullname'] ?? 'User')[0]) ?>. Here's your overview.</p>
     </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box text-bg-success">
-            <div class="inner">
-                <h3>53<sup class="fs-5">%</sup></h3>
-                <p>Bounce Rate</p>
-            </div>
-            <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
-            </svg>
-            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">More info <i class="bi bi-link-45deg"></i></a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box text-bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-                <p>User Registrations</p>
-            </div>
-            <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
-            </svg>
-            <a href="#" class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover">More info <i class="bi bi-link-45deg"></i></a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box text-bg-danger">
-            <div class="inner">
-                <h3>65</h3>
-                <p>Unique Visitors</p>
-            </div>
-            <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path clip-rule="evenodd" fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"></path>
-                <path clip-rule="evenodd" fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"></path>
-            </svg>
-            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">More info <i class="bi bi-link-45deg"></i></a>
-        </div>
+    <div class="page-head-actions">
+        <button class="btn btn-secondary"><i class="bi bi-sliders"></i> Filters</button>
+        <button class="btn btn-primary"><i class="bi bi-plus"></i> Add Student</button>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-7 connectedSortable">
-        <div class="card mb-4">
-            <div class="card-header"><h3 class="card-title">Sales Value</h3></div>
-            <div class="card-body"><div id="revenue-chart"></div></div>
-        </div>
-        <div class="card direct-chat direct-chat-primary mb-4">
-            <div class="card-header">
-                <h3 class="card-title">Direct Chat</h3>
-                <div class="card-tools">
-                    <span title="3 New Messages" class="badge text-bg-primary">3</span>
-                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" title="Contacts" data-lte-toggle="chat-pane">
-                        <i class="bi bi-chat-text-fill"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="direct-chat-messages">
-                    <div class="direct-chat-msg">
-                        <div class="direct-chat-infos clearfix">
-                            <span class="direct-chat-name float-start">Alexander Pierce</span>
-                            <span class="direct-chat-timestamp float-end">23 Jan 2:00 pm</span>
-                        </div>
-                        <img class="direct-chat-img" src="<?= base_url('assets/img/user1-128x128.jpg') ?>" alt="message user image" />
-                        <div class="direct-chat-text">Is this template really for free? That's unbelievable!</div>
-                    </div>
-                    <div class="direct-chat-msg end">
-                        <div class="direct-chat-infos clearfix">
-                            <span class="direct-chat-name float-end">Sarah Bullock</span>
-                            <span class="direct-chat-timestamp float-start">23 Jan 2:05 pm</span>
-                        </div>
-                        <img class="direct-chat-img" src="<?= base_url('assets/img/user3-128x128.jpg') ?>" alt="message user image" />
-                        <div class="direct-chat-text">You better believe it!</div>
-                    </div>
-                    <div class="direct-chat-msg">
-                        <div class="direct-chat-infos clearfix">
-                            <span class="direct-chat-name float-start">Alexander Pierce</span>
-                            <span class="direct-chat-timestamp float-end">23 Jan 5:37 pm</span>
-                        </div>
-                        <img class="direct-chat-img" src="<?= base_url('assets/img/user1-128x128.jpg') ?>" alt="message user image" />
-                        <div class="direct-chat-text">Working with AdminLTE on a great new app! Wanna join?</div>
-                    </div>
-                    <div class="direct-chat-msg end">
-                        <div class="direct-chat-infos clearfix">
-                            <span class="direct-chat-name float-end">Sarah Bullock</span>
-                            <span class="direct-chat-timestamp float-start">23 Jan 6:10 pm</span>
-                        </div>
-                        <img class="direct-chat-img" src="<?= base_url('assets/img/user3-128x128.jpg') ?>" alt="message user image" />
-                        <div class="direct-chat-text">I would love to.</div>
-                    </div>
-                </div>
-                <div class="direct-chat-contacts">
-                    <ul class="contacts-list">
-                        <li><a href="#"><img class="contacts-list-img" src="<?= base_url('assets/img/user1-128x128.jpg') ?>" alt="User Avatar" /><div class="contacts-list-info"><span class="contacts-list-name">Count Dracula<small class="contacts-list-date float-end">2/28/2023</small></span><span class="contacts-list-msg">How have you been? I was...</span></div></a></li>
-                        <li><a href="#"><img class="contacts-list-img" src="<?= base_url('assets/img/user7-128x128.jpg') ?>" alt="User Avatar" /><div class="contacts-list-info"><span class="contacts-list-name">Sarah Doe<small class="contacts-list-date float-end">2/23/2023</small></span><span class="contacts-list-msg">I will be waiting for...</span></div></a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card-footer">
-                <form action="#" method="post">
-                    <div class="input-group">
-                        <input type="text" name="message" placeholder="Type Message ..." class="form-control" />
-                        <span class="input-group-append"><button type="button" class="btn btn-primary">Send</button></span>
-                    </div>
-                </form>
+<!-- KPI Row -->
+<div class="kpi-row">
+    <?php foreach ([
+        ['v', 'bi-people-fill',         'Total Students', '1,248', '+12%', true],
+        ['e', 'bi-person-check-fill',   'Active Today',   '342',   '+5%',  true],
+        ['a', 'bi-person-plus-fill',    'New This Month', '56',    '-2%',  false],
+        ['s', 'bi-mortarboard-fill',    'Courses',        '18',    '+1',   true],
+    ] as [$color, $icon, $label, $val, $delta, $up]): ?>
+    <div class="kpi">
+        <div class="kpi-top">
+            <div class="kpi-icon <?= $color ?>"><i class="bi <?= $icon ?>"></i></div>
+            <div class="kpi-trend <?= $up ? 'up' : 'down' ?>">
+                <i class="bi bi-arrow-<?= $up ? 'up' : 'down' ?>-right"></i><?= $delta ?>
             </div>
         </div>
+        <div class="kpi-val"><?= $val ?></div>
+        <div class="kpi-lbl"><?= $label ?></div>
     </div>
-    <div class="col-lg-5 connectedSortable">
-        <div class="card text-white bg-primary bg-gradient border-primary mb-4">
-            <div class="card-header border-0">
-                <h3 class="card-title">Sales Value</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-primary btn-sm" data-lte-toggle="card-collapse">
-                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body"><div id="world-map" style="height: 220px"></div></div>
-            <div class="card-footer border-0">
-                <div class="row">
-                    <div class="col-4 text-center">
-                        <div id="sparkline-1" class="text-dark"></div>
-                        <div class="text-white">Visitors</div>
-                    </div>
-                    <div class="col-4 text-center">
-                        <div id="sparkline-2" class="text-dark"></div>
-                        <div class="text-white">Online</div>
-                    </div>
-                    <div class="col-4 text-center">
-                        <div id="sparkline-3" class="text-dark"></div>
-                        <div class="text-white">Sales</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php endforeach; ?>
 </div>
+
+<!-- Bento Grid -->
+<div class="bento">
+
+    <!-- Bar Chart — spans 2 cols -->
+    <div class="card bento-wide">
+        <div class="card-header">
+            <span class="card-title">
+                <i class="bi bi-bar-chart-fill" style="color:var(--violet);"></i>
+                Monthly Enrollment
+            </span>
+            <div style="display:flex;gap:4px;">
+                <button class="btn btn-ghost btn-sm" style="font-size:11px;">Weekly</button>
+                <button class="btn btn-secondary btn-sm" style="font-size:11px;">Monthly</button>
+                <button class="btn btn-ghost btn-sm" style="font-size:11px;">Yearly</button>
+            </div>
+        </div>
+        <div class="card-body" style="padding:12px 18px 8px;">
+            <div id="chart-bar"></div>
+        </div>
+    </div>
+
+    <!-- Donut + Legend — right column, spans 2 rows -->
+    <div class="card bento-tall" style="grid-column:3;grid-row:1/3;">
+        <div class="card-header">
+            <span class="card-title"><i class="bi bi-pie-chart-fill" style="color:var(--violet);"></i> User Breakdown</span>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:16px;">
+            <div id="chart-donut"></div>
+
+            <div style="display:flex;flex-direction:column;gap:2px;">
+                <?php foreach ([
+                    ['Students',     '#7c3aed', '72%', '900'],
+                    ['Teachers',     '#059669', '15%', '187'],
+                    ['Coordinators', '#b45309', '8%',  '100'],
+                    ['Admins',       '#0284c7', '5%',  '61'],
+                ] as [$l, $c, $pct, $n]): ?>
+                <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+                    <span style="width:10px;height:10px;border-radius:3px;background:<?= $c ?>;flex-shrink:0;display:inline-block;"></span>
+                    <span style="font-size:12px;color:var(--text-2);font-weight:500;flex:1;"><?= $l ?></span>
+                    <span style="font-size:12px;font-weight:700;color:var(--text-1);"><?= $n ?></span>
+                    <span style="font-size:11px;color:var(--text-3);width:30px;text-align:right;"><?= $pct ?></span>
+                </div>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Quick Actions -->
+            <div>
+                <div class="section-label">Quick Actions</div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <a href="<?= base_url('students') ?>" class="btn btn-secondary btn-sm" style="justify-content:flex-start;">
+                        <i class="bi bi-people"></i> View All Students
+                    </a>
+                    <a href="<?= base_url('admin/users') ?>" class="btn btn-secondary btn-sm" style="justify-content:flex-start;">
+                        <i class="bi bi-person-badge"></i> Manage Users
+                    </a>
+                    <button class="btn btn-primary btn-sm" style="justify-content:flex-start;">
+                        <i class="bi bi-file-earmark-bar-graph"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title"><i class="bi bi-clock-history" style="color:var(--violet);"></i> Recent Activity</span>
+            <a href="#" style="font-size:11px;color:var(--violet);font-weight:600;">See all</a>
+        </div>
+        <div class="card-body" style="padding:8px 18px;">
+            <?php foreach ([
+                ['#7c3aed', '<strong>Maria Santos</strong> enrolled in BSIT — Section A', '2m ago'],
+                ['#059669', '<strong>Teacher Cruz</strong> updated student records',       '15m ago'],
+                ['#b45309', '<strong>New registration</strong> pending approval',          '1h ago'],
+                ['#0284c7', '<strong>System</strong> backup completed',                    '3h ago'],
+                ['#059669', '<strong>Juan dela Cruz</strong> profile updated',             '5h ago'],
+            ] as [$dot, $text, $time]): ?>
+            <div class="activity-item">
+                <div class="activity-dot" style="background:<?= $dot ?>;"></div>
+                <div style="flex:1;">
+                    <div class="activity-text"><?= $text ?></div>
+                    <div class="activity-time"><?= $time ?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- Top Courses Table -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title"><i class="bi bi-list-ol" style="color:var(--violet);"></i> Top Courses</span>
+            <span class="badge badge-gray">This semester</span>
+        </div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Students</th>
+                        <th>Fill</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ([
+                        ['BSIT', '312', 78, 'emerald', 'Active'],
+                        ['BSCS', '278', 70, 'emerald', 'Active'],
+                        ['BSBA', '201', 50, 'emerald', 'Active'],
+                        ['BSED', '189', 47, 'amber',   'Review'],
+                        ['BSHM', '145', 36, 'emerald', 'Active'],
+                    ] as [$course, $count, $pct, $color, $status]): ?>
+                    <tr>
+                        <td style="font-weight:600;"><?= $course ?></td>
+                        <td style="color:var(--text-2);"><?= $count ?></td>
+                        <td style="min-width:80px;">
+                            <div style="height:4px;background:var(--border);border-radius:99px;overflow:hidden;">
+                                <div style="height:100%;width:<?= $pct ?>%;background:var(--violet);border-radius:99px;"></div>
+                            </div>
+                        </td>
+                        <td><span class="badge badge-<?= $color ?>"><?= $status ?></span></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div><!-- /bento -->
+
 <?= $this->endSection() ?>
 
 <?= $this->section('javascript') ?>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js" integrity="sha256-/t1nN2956BT869E6H4V1dnt0X5pAQHPytli+1nTZm2Y=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js" integrity="sha256-XPpPaZlU8S/HWf7FZLAncLg2SAkP8ScUTII89x9D3lY=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" crossorigin="anonymous"></script>
 <script>
-new Sortable(document.querySelector('.connectedSortable'), {group: 'shared', handle: '.card-header'});
-document.querySelectorAll('.connectedSortable .card-header').forEach((h) => {h.style.cursor = 'move';});
+// Bar Chart
+new ApexCharts(document.querySelector('#chart-bar'), {
+    series: [
+        { name: 'Enrolled', data: [820, 932, 901, 1034, 1090, 1130, 1248] },
+        { name: 'Active',   data: [280, 310, 295, 320, 335, 342, 342] }
+    ],
+    chart: { height: 200, type: 'bar', toolbar: { show: false }, fontFamily: 'Inter, sans-serif', background: 'transparent' },
+    colors: ['#7c3aed', '#e0d9fb'],
+    plotOptions: { bar: { columnWidth: '55%', borderRadius: 4, borderRadiusApplication: 'end' } },
+    dataLabels: { enabled: false },
+    xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        axisBorder: { show: false }, axisTicks: { show: false },
+        labels: { style: { colors: '#94a3b8', fontSize: '11px' } }
+    },
+    yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '11px' } } },
+    grid: { borderColor: '#e2e8f0', strokeDashArray: 4, padding: { left: 0, right: 0, top: -10 } },
+    legend: { position: 'top', horizontalAlign: 'right', fontSize: '12px', fontWeight: 500, markers: { radius: 3, width: 10, height: 10 } },
+    tooltip: { style: { fontSize: '12px' } }
+}).render();
 
-const sales_chart = new ApexCharts(document.querySelector('#revenue-chart'), {
-    series: [{name: 'Digital Goods', data: [28, 48, 40, 19, 86, 27, 90]}, {name: 'Electronics', data: [65, 59, 80, 81, 56, 55, 40]}],
-    chart: {height: 300, type: 'area', toolbar: {show: false}},
-    legend: {show: false},
-    colors: ['#0d6efd', '#20c997'],
-    dataLabels: {enabled: false},
-    stroke: {curve: 'smooth'},
-    xaxis: {type: 'datetime', categories: ['2023-01-01', '2023-02-01', '2023-03-01', '2023-04-01', '2023-05-01', '2023-06-01', '2023-07-01']},
-    tooltip: {x: {format: 'MMMM yyyy'}}
-});
-sales_chart.render();
-
-new jsVectorMap({selector: '#world-map', map: 'world'});
-
-[{data: [1000, 1200, 920, 927, 931, 1027, 819, 930, 1021]}, {data: [515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921]}, {data: [15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21]}].forEach((s, i) => {
-    new ApexCharts(document.querySelector('#sparkline-' + (i + 1)), {
-        series: [s],
-        chart: {type: 'area', height: 50, sparkline: {enabled: true}},
-        stroke: {curve: 'straight'},
-        fill: {opacity: 0.3},
-        yaxis: {min: 0},
-        colors: ['#DCE6EC']
-    }).render();
-});
+// Donut Chart
+new ApexCharts(document.querySelector('#chart-donut'), {
+    series: [72, 15, 8, 5],
+    chart: { height: 200, type: 'donut', fontFamily: 'Inter, sans-serif', background: 'transparent' },
+    colors: ['#7c3aed', '#059669', '#b45309', '#0284c7'],
+    labels: ['Students', 'Teachers', 'Coordinators', 'Admins'],
+    dataLabels: { enabled: false },
+    legend: { show: false },
+    stroke: { show: true, colors: ['#ffffff'], width: 3 },
+    plotOptions: {
+        pie: { donut: { size: '68%', labels: { show: true,
+            total: { show: true, showAlways: true, label: 'Total', fontSize: '11px', color: '#94a3b8', formatter: () => '1,248' },
+            value: { show: true, fontSize: '22px', fontWeight: 700, color: '#0f172a' }
+        }}}
+    },
+    tooltip: { style: { fontSize: '12px' } }
+}).render();
 </script>
 <?= $this->endSection() ?>

@@ -4,6 +4,10 @@ namespace Config;
 
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
+use App\Filters\AuthFilter;
+use App\Filters\StudentFilter;
+use App\Filters\TeacherFilter;
+use App\Filters\AdminFilter;
 use App\Filters\Authorization;
 use App\Filters\Authentication;
 use CodeIgniter\Filters\Honeypot;
@@ -38,6 +42,10 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'isLoggedIn'    => Authentication::class,
         'isGranted'     => Authorization::class,
+        'auth'          => AuthFilter::class,
+        'student'       => StudentFilter::class,
+        'teacher'       => TeacherFilter::class,
+        'admin'         => AdminFilter::class,
     ];
 
     /**
@@ -73,8 +81,9 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'isLoggedIn' => ['except' => ['/', 'register', 'login']],
-            'isGranted'  => ['except' => ['/', 'register', 'login', 'logout', 'blocked', 'dashboard', 'dashboard-v2', 'dashboard-v3', 'students', 'student/*']],
+            // Legacy filters kept for menu-management system compatibility
+            'isLoggedIn' => ['except' => ['/', 'register', 'login', 'unauthorized']],
+            'isGranted'  => ['except' => ['/', 'register', 'login', 'logout', 'blocked', 'unauthorized', 'dashboard', 'dashboard-v2', 'dashboard-v3', 'student/*', 'students', 'student', 'profile', 'profile/*', 'admin/*']],
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',

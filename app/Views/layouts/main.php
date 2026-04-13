@@ -1,47 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>CodeIgniter 4 Starter Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
-    <link rel="stylesheet" href="<?= base_url('css/adminlte.css') ?>" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
+    <meta charset="utf-8" />
+    <title>HSE Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?= base_url('assets/css/premium.css') ?>?v=<?= time() ?>" />
 </head>
-<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
-    <div class="app-wrapper">
+<body>
+<div class="app-shell">
+    <?= $this->include('layouts/sidebar') ?>
+
+    <div class="app-main">
         <?= $this->include('layouts/header') ?>
-        <?= $this->include('layouts/sidebar') ?>
-        <main class="app-main">
-            <div class="app-content-header">
-                <div class="container-fluid">
-                    <?= $this->include('components/alerts') ?>
-                    <?= $this->renderSection('breadcrumb') ?>
+
+        <div class="app-content">
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="flash flash-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <?= session()->getFlashdata('success') ?>
                 </div>
-            </div>
-            <div class="app-content">
-                <div class="container-fluid">
-                    <?= $this->renderSection('content') ?>
+            <?php endif; ?>
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="flash flash-error">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <?= session()->getFlashdata('error') ?>
                 </div>
-            </div>
-        </main>
-        <?= $this->include('layouts/footer') ?>
+            <?php endif; ?>
+            <?= $this->renderSection('content') ?>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script src="<?= base_url('js/adminlte.js') ?>"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebarWrapper = document.querySelector('.sidebar-wrapper');
-            if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
-                OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {scrollbars: {theme: 'os-theme-light', autoHide: 'leave', clickScroll: true}});
-            }
-        });
-    </script>
-    <?= $this->renderSection('javascript') ?>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<?= $this->renderSection('javascript') ?>
 </body>
 </html>

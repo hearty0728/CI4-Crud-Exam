@@ -42,7 +42,7 @@ abstract class BaseController extends Controller
      * Be sure to declare properties for any property fetch you initialized.
      * The creation of dynamic property is deprecated in PHP 8.2.
      */
-    protected $session, $segment, $validation, $encrypter, $ApplicationModel, $data = [];
+    protected $session, $segment, $validation, $encrypter, $ApplicationModel, $db, $data = [];
     /**
      * @return void
      */
@@ -58,19 +58,28 @@ abstract class BaseController extends Controller
         $this->validation       = \Config\Services::validation();
         $this->encrypter        = \Config\Services::encrypter();
         $this->ApplicationModel = new ApplicationModel();
+        $this->db               = \Config\Database::connect();
 
-        $user    = $this->ApplicationModel->getUser(username: session()->get('username'));
-        $segment = $this->segment->getSegment(1);
-        if ($segment) {
-            $subsegment = $this->segment->getSegment(2);
+        // Support both new RBAC session and legacy session
+        $sessionUser = session('user');
+        if ($sessionUser) {
+            $user = $this->ApplicationModel->getUser(username: $sessionUser['username'] ?? $sessionUser['email'] ?? '');
+            // Merge role from new session into user array
+            if ($user && isset($sessionUser['role'])) {
+                $user['role_slug'] = $sessionUser['role'];
+            }
         } else {
-            $subsegment = '';
+            $user = $this->ApplicationModel->getUser(username: session()->get('username'));
         }
+
+        $segment = $this->segment->getSegment(1);
+        $subsegment = $segment ? $this->segment->getSegment(2) : '';
+
         $this->data = [
-            'segment'        => $segment,
-            'subsegment'     => $subsegment,
-            'user'           => $user,
-            'MenuCategory'   => $this->ApplicationModel->getAccessMenuCategory(session()->get('role'))
+            'segment'      => $segment,
+            'subsegment'   => $subsegment,
+            'user'         => $user,
+            'MenuCategory' => $this->ApplicationModel->getAccessMenuCategory(session()->get('role') ?? 1),
         ];
     }
 }

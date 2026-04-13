@@ -2,140 +2,102 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\UserModel;
 
 class ProfileController extends BaseController
 {
-
     public function show()
     {
-        $username = session()->get('username');
-        
-        if (!$username) {
+        $user = $this->data['user'];
+
+        if (! $user) {
             session()->destroy();
             return redirect()->to('/login');
         }
 
-        $user = $this->ApplicationModel->getUser(username: $username);
-
-        if (!$user) {
-            session()->destroy();
-            return redirect()->to('/login');
-        }
-
-        $data = array_merge($this->data, [
-            'title' => 'My Profile',
-            'user' => $user
-        ]);
-
-        return view('profile/show', $data);
+        return view('profile/show', array_merge($this->data, ['user' => $user]));
     }
 
     public function edit()
     {
-        $username = session()->get('username');
-        
-        if (!$username) {
-            session()->destroy();
-            return redirect()->to('/login');
-        }
-
-        $user = $this->ApplicationModel->getUser(username: $username);
-
-        if (!$user) {
-            session()->destroy();
-            return redirect()->to('/login');
-        }
-
-        $data = array_merge($this->data, [
-            'title' => 'Edit Profile',
-            'user' => $user
-        ]);
-
-        return view('profile/edit', $data);
+        $user = $this->data['user'];
+        return view('profile/edit', array_merge($this->data, ['user' => $user]));
     }
 
     public function update()
     {
-        $username = session()->get('username');
-        
-        if (!$username) {
-            session()->destroy();
-            return redirect()->to('/login');
-        }
+        $user      = $this->data['user'];
+        $userId    = $user['userID'] ?? $user['id'];
+        $userModel = new UserModel();
 
-        $user = $this->ApplicationModel->getUser(username: $username);
-
-        if (!$user) {
-            session()->destroy();
-            return redirect()->to('/login');
-        }
-
-        $userId = $user['userID'];
-
+        // Validate text fields
         $rules = [
-            'fullname' => 'required|min_length[3]|max_length[100]',
-            'username' => "required|valid_email|is_unique[users.username,id,{$userId}]",
-            'student_id' => 'permit_empty|max_length[20]',
-            'course' => 'permit_empty|max_length[100]',
-            'year_level' => 'permit_empty|integer|greater_than[0]|less_than[6]',
-            'section' => 'permit_empty|max_length[50]',
-            'phone' => 'permit_empty|max_length[20]',
-            'address' => 'permit_empty|max_length[500]'
+            'fullname'         => 'required|min_length[3]',
+            'username'         => "required|is_unique[users.username,id,{$userId}]",
+            'student_id'       => 'permit_empty|max_length[20]',
+            'course'           => 'permit_empty|max_length[100]',
+            'year_level'       => 'permit_empty|integer|greater_than[0]|less_than[6]',
+            'section'          => 'permit_empty|max_length[50]',
+            'phone'            => 'permit_empty|max_length[20]',
+            'address'          => 'permit_empty|max_length[255]',
+            'new_password'     => 'permit_empty|min_length[8]',
+            'confirm_password' => 'permit_empty|matches[new_password]',
         ];
 
-        if (!$this->validate($rules)) {
+        if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $updateData = [
-            'fullname' => $this->request->getPost('fullname'),
-            'username' => $this->request->getPost('username'),
+            'fullname'   => $this->request->getPost('fullname'),
+            'username'   => $this->request->getPost('username'),
             'student_id' => $this->request->getPost('student_id'),
-            'course' => $this->request->getPost('course'),
+            'course'     => $this->request->getPost('course'),
             'year_level' => $this->request->getPost('year_level'),
-            'section' => $this->request->getPost('section'),
-            'phone' => $this->request->getPost('phone'),
-            'address' => $this->request->getPost('address')
+            'section'    => $this->request->getPost('section'),
+            'phone'      => $this->request->getPost('phone'),
+            'address'    => $this->request->getPost('address'),
         ];
 
+        // Handle password change
+        $newPassword = $this->request->getPost('new_password');
+        if (! empty($newPassword)) {
+            $updateData['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+        }
+
+        // Handle image upload
         $file = $this->request->getFile('profile_image');
-
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $validationRules = [
-                'profile_image' => 'uploaded[profile_image]|is_image[profile_image]|mime_in[profile_image,image/jpg,image/jpeg,image/png,image/webp]|max_size[profile_image,2048]'
-            ];
-
-            if (!$this->validate($validationRules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            if (!empty($user['profile_image'])) {
-                $oldImagePath = FCPATH . 'uploads/profiles/' . $user['profile_image'];
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+        if ($file && $file->isValid() && ! $file->hasMoved()) {
+            if ($this->validate([
+                'profile_image' => 'is_image[profile_image]|mime_in[profile_image,image/jpg,image/jpeg,image/png,image/webp]|max_size[profile_image,2048]',
+            ])) {
+                // Delete old image
+                if (! empty($user['profile_image'])) {
+                    $old = FCPATH . 'uploads/profiles/' . $user['profile_image'];
+                    if (file_exists($old)) unlink($old);
                 }
+
+                $ext     = $file->getExtension();
+                $newName = 'avatar_' . $userId . '_' . time() . '.' . $ext;
+                $file->move(FCPATH . 'uploads/profiles/', $newName);
+                $updateData['profile_image'] = $newName;
             }
-
-            $ext = $file->getExtension();
-            $newName = 'avatar_' . $userId . '_' . time() . '.' . $ext;
-            $file->move(FCPATH . 'uploads/profiles/', $newName);
-            $updateData['profile_image'] = $newName;
         }
 
-        if ($this->ApplicationModel->updateProfile($userId, $updateData)) {
-            session()->set('username', $updateData['username']);
-            session()->setFlashdata('notif_success', 'Profile updated successfully!');
-            return redirect()->to('/profile');
-        }
+        $userModel->updateProfile($userId, $updateData);
 
-        // Debug: Log the error
-        log_message('error', 'Profile update failed for user ID: ' . $userId);
-        log_message('error', 'Update data: ' . json_encode($updateData));
-        log_message('error', 'Database error: ' . json_encode($this->db->error()));
-        
-        session()->setFlashdata('notif_error', 'Failed to update profile. Please check if all database columns exist.');
-        return redirect()->back()->withInput();
+        // Refresh session so navbar name updates immediately
+        $sessionUser = session('user');
+        if ($sessionUser) {
+            $sessionUser['name']     = $updateData['fullname'];
+            $sessionUser['fullname'] = $updateData['fullname'];
+            $sessionUser['username'] = $updateData['username'];
+            $sessionUser['email']    = $updateData['username'];
+            session()->set('user', $sessionUser);
+        }
+        session()->set('username', $updateData['username']);
+
+        session()->setFlashdata('success', 'Profile updated successfully!');
+        return redirect()->to('/profile');
     }
 }
